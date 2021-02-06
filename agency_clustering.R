@@ -3,12 +3,12 @@ library(lubridate)
 library(cluster)
 
 # read in dataset
-data <- read.csv("~/Datathon 2021/transaction_data.csv")
+data <- read.csv("transaction_data.csv")
 # fix variable name
 data$ObjectID <- data$ï..OBJECTID
 data$ï..OBJECTID <- NULL
 # convert transaction date from character to date
-data$TRANSACTION_DATE <- lubridate::ymd(substr(data$TRANSACTION_DATE, 1, 10))
+data$TRANSACTION_DATE <- ymd(substr(data$TRANSACTION_DATE, 1, 10))
 
 # summarises agencies
 agency_summary <- data %>% 
@@ -57,5 +57,16 @@ hc.complete <- hclust(gower.dist, method = "complete")
 plot(hc.complete, main = "Complete Linkage w/ Scaled Features", xlab="", sub ="", labels = agency_summary$agency, cex = 0.9)
 
 # cuts the dendrogram to decide how many clusters we will have
-#agency_summary$cluster <- cutree(hc.complete, 14)
+agency_summary$cluster <- cutree(hc.complete, 20)
 
+# change back to character representation
+agency_summary$vendor1 <- as.character(agency_summary$vendor1)
+agency_summary$vendor2 <- as.character(agency_summary$vendor2)
+agency_summary$vendor3 <- as.character(agency_summary$vendor3)
+agency_summary$vendor4 <- as.character(agency_summary$vendor4)
+agency_summary$vendor5 <- as.character(agency_summary$vendor5)
+agency_summary$category1 <- as.character(agency_summary$category1)
+agency_summary$category2 <- as.character(agency_summary$category2)
+agency_summary$category3 <- as.character(agency_summary$category3)
+
+write.csv(agency_summary, "agency_summary.csv")

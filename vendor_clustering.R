@@ -3,12 +3,12 @@ library(lubridate)
 library(cluster)
 
 # read in dataset
-data <- read.csv("~/Datathon 2021/transaction_data.csv")
+data <- read.csv("transaction_data.csv")
 # fix variable name
 data$ObjectID <- data$ï..OBJECTID
 data$ï..OBJECTID <- NULL
 # convert transaction date from character to date
-data$TRANSACTION_DATE <- lubridate::ymd(substr(data$TRANSACTION_DATE, 1, 10))
+data$TRANSACTION_DATE <- ymd(substr(data$TRANSACTION_DATE, 1, 10))
 
 # only want observations with above 750 purchases
 top_vendor_frequencies <- sort(count(data, VENDOR_NAME)$n, decreasing = T)[1:56]
@@ -56,4 +56,4 @@ hc.complete <- hclust(gower.dist, method = "complete")
 plot(hc.complete, main = "Complete Linkage w/ Scaled Features", xlab="", sub ="", labels = vendor_summary$vendor, cex = 0.9)
 
 # cuts the dendrogram to decide how many clusters we will have
-#vendor_summary$cluster <- cutree(hc.complete, 10)
+#vendor_summary$cluster <- cutree(hc.complete, 15)
